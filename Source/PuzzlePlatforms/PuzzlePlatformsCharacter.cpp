@@ -64,6 +64,17 @@ void APuzzlePlatformsCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+		GetMesh()->SetSkeletalMesh(ServerUseMesh);
+	}
+	else
+	{
+		GetMesh()->SetSkeletalMesh(ClientUseMesh);
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////

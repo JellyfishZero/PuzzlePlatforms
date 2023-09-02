@@ -19,8 +19,19 @@ public:
 
 protected:
 
+	void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basic Setting")
 	int32 Speed = 10;
 
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
+	FVector TargetLocation;
+
+private:
+	FVector GlobalTargetLocation;
+	FVector GlobalStartLocation;
 };
