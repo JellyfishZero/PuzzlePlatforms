@@ -3,6 +3,7 @@
 
 #include "PlatformTrigger.h"
 #include "Components/BoxComponent.h"
+#include "MovingPlatform.h"
 
 // Sets default values
 APlatformTrigger::APlatformTrigger()
@@ -13,6 +14,9 @@ APlatformTrigger::APlatformTrigger()
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(FName("TriggerVolume"));
 	if (!ensure(TriggerVolume!=nullptr)) return;
 	RootComponent = TriggerVolume;
+
+	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &APlatformTrigger::OnOverlapBegin);
+	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &APlatformTrigger::OnOverlapEnd);
 }
 
 // Called when the game starts or when spawned
@@ -27,5 +31,21 @@ void APlatformTrigger::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void APlatformTrigger::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	for (AMovingPlatform* Platform : PlatformsToTrigger)
+	{
+		Platform->AddActiveTrigger();
+	}
+}
+
+void APlatformTrigger::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	for (AMovingPlatform* Platform : PlatformsToTrigger)
+	{
+		Platform->RemoveActiveTrigger();
+	}
 }
 

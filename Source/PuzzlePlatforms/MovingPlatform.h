@@ -31,7 +31,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
 	FVector TargetLocation;
 
+public:
+	void AddActiveTrigger();
+
+	void RemoveActiveTrigger();
+
 private:
 	FVector GlobalTargetLocation;
 	FVector GlobalStartLocation;
+
+	UPROPERTY(EditAnywhere)
+	int32 ActiveTriggers = 1;
 };
